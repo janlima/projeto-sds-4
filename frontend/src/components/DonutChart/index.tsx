@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { SaleSum } from "types/sale";
 import { BASE_URL } from "utils/requests";
@@ -14,30 +15,33 @@ type ChartData = {
 //   labels: ['Anakin', 'Barry Allen', 'Kal-El', 'Logan', 'Padmé']
 // }
 
-const options = {
-  legend: {
-    show: true
-  }
-}
 
-let chartData: ChartData = {
-  labels: ['Anakin', 'Barry Allen', 'Kal-El', 'Logan', 'Padmé'],
-  series: [477138, 499928, 444867, 220426, 473088]
-};
-
-axios.get(`${BASE_URL}/sales/total-sales-by-seller`)
-  .then(
-    (res) => {
-      const data = res.data as SaleSum[];
-      const tags = data.map(x => x.sellerName);
-      const values = data.map(x => x.sum);
-
-      chartData = { labels: tags, series: values };
-
-      console.log(chartData);
-    }
-  );
 function DonutChart() {
+
+  //  [varName, function] = useState<type>(default_value)
+  const [chartData, setChartData] = useState<ChartData>({ labels: [], series: [] });
+
+  useEffect(
+    () => {
+      axios.get(`${BASE_URL}/sales/total-sales-by-seller`)
+        .then(
+          (res) => {
+            const data = res.data as SaleSum[];
+            const tags = data.map(x => x.sellerName);
+            const values = data.map(x => x.sum);
+
+            setChartData({ labels: tags, series: values });
+          }
+        );
+    },
+    []
+  );
+
+  const options = {
+    legend: {
+      show: true
+    }
+  }
 
 
   return (
