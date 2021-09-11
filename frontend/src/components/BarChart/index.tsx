@@ -58,7 +58,6 @@ function BarChart() {
               const  values = data.map(
                 x => round(100 * x.deals / x.visited, 1)
               );
-              const sname = "% Sucess";
 
               setChartData(
                 {
@@ -67,7 +66,7 @@ function BarChart() {
                   },
                   series: [
                     {
-                      name: sname,
+                      name: "% Sucess",
                       data: values
                     }
                   ]
